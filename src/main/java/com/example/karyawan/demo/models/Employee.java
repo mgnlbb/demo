@@ -30,16 +30,6 @@ public class Employee {
     @Column(name = "employee_email", nullable = false)
     private String EmployeeEmail;
 
-    @Column(name = "employee_agama", nullable = false)
-    private String EmployeeAgama;
-
-    @ManyToOne
-    @JoinColumn(name = "position_id", insertable = false, updatable = false)
-    public Position position;
-
-    @Column(name = "position_id")
-    private long PositionId;
-
     public long getId() {
         return id;
     }
@@ -104,6 +94,14 @@ public class Employee {
         EmployeeAgama = employeeAgama;
     }
 
+    public long getSisaCuti() {
+        return SisaCuti;
+    }
+
+    public void setSisaCuti(long sisaCuti) {
+        SisaCuti = sisaCuti;
+    }
+
     public Position getPosition() {
         return position;
     }
@@ -120,16 +118,43 @@ public class Employee {
         PositionId = positionId;
     }
 
-    public long getSisaCuti() {
-        return SisaCuti;
+    public Role getRole() {
+        return role;
     }
 
-    public void setSisaCuti(long sisaCuti) {
-        SisaCuti = sisaCuti;
+    public void setRole(Role role) {
+        this.role = role;
     }
+
+    public long getRoleId() {
+        return RoleId;
+    }
+
+    public void setRoleId(long roleId) {
+        RoleId = roleId;
+    }
+
+    @Column(name = "employee_agama", nullable = false)
+    private String EmployeeAgama;
 
     @Column(name = "sisa_cuti")
     private long SisaCuti = 12;
+
+    @ManyToOne
+    @JoinColumn(name = "position_id", insertable = false, updatable = false)
+    public Position position;
+
+    @Column(name = "position_id")
+    private long PositionId;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    public Role role;
+
+    @Column(name = "role_id")
+    private long RoleId;
+
+
 
 
 }

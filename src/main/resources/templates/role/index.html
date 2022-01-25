@@ -21,7 +21,7 @@
                     <a class="nav-link" href="/position/index">Position</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/role/role">Role</a>
+                    <a class="nav-link" href="/role/index">Role</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/employee/index">Employee</a>
@@ -39,11 +39,12 @@
     <p>
         <button class="btn btn-primary" onclick="OpenList(0,5)">Open List</button>
         <button class="btn btn-primary" onclick="OpenForm()">Open Add Form</button>
-    </p>
-    <div class="col col-lg-6">
+  
+  </p>
+    <!-- <div class="col col-lg-6">
         <input class="form-control" type="text" placeholder="Search" onkeyup="SearchPosition(this.value)"
            autocomplete="off">
-    </div>
+    </div> -->
     
     <div id="positionList"></div>
 </div>
@@ -59,7 +60,7 @@
 function OpenList(currentPage, length) {
             console.log("ini open list")
             $.ajax({
-                url: '/api/positionmapped?page=' + currentPage + '&size=' + length,
+                url: '/api/rolemapped?page=' + currentPage + '&size=' + length,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (data) {
@@ -72,19 +73,19 @@ function OpenList(currentPage, length) {
                     table += '</select>'
                     table += "<table class='table table-striped table-bordered mt-3'>";
                     table +=
-                        "<tr> <th width='10%' class='text-center'>#</th> <th>Position Code</th> <th>Position Name</th> <th>Position Description</th> <th>Action</th> </tr>"
-                    for (let i = 0; i < data.position.length; i++) {
-                        console.log(data.position.length)
+                        "<tr> <th width='10%' class='text-center'>#</th> <th>Role Code</th> <th>role Name</th> <th>role Description</th> <th>Action</th> </tr>"
+                    for (let i = 0; i < data.role.length; i++) {
+                        console.log(data.role.length)
                         table += "<tr>";
                         table += "<td class='text-center'>" + ((i + 1) + (data.currentPage * length)) +
                             "</td>";
-                        table += "<td>" + data.position[i].positionCode + "</td>";
-                        table += "<td>" + data.position[i].positionName + "</td>";
-                        table += "<td>" + data.position[i].positionDescription + "</td>";
-                        table += "<td><button class='btn btn-primary btn-sm' value='" + data.position[i]
+                        table += "<td>" + data.role[i].roleCode + "</td>";
+                        table += "<td>" + data.role[i].roleName + "</td>";
+                        table += "<td>" + data.role[i].roleDescription + "</td>";
+                        table += "<td><button class='btn btn-primary btn-sm' value='" + data.role[i]
                             .id +
                             "' onclick=formEdit(this.value)>Edit</button> <button class='btn btn-danger btn-sm' value='" +
-                            data.position[i].id + "' onclick=DeletePosition(this.value)>Delete</button></td>";
+                            data.role[i].id + "' onclick=Deleterole(this.value)>Delete</button></td>";
                         table += "</tr>";
                     }
                     table += "</table>";
@@ -109,19 +110,20 @@ function OpenList(currentPage, length) {
             });
         }
 
-function OpenForm() {
+
+        function OpenForm() {
             var form = '<table class="table table-bordered"';
             form += "<tr>";
-            form += "<td>Position Code</td>";
-            form += '<td><input class="form-control" type ="text" id="position_code"></td>';
+            form += "<td>Role Code</td>";
+            form += '<td><input class="form-control" type ="text" id="role_code"></td>';
             form += "</tr>";
             form += "<tr>";
-            form += "<td>Position Name</td>";
-            form += '<td><input class="form-control" type ="text" id="position_name"></td>';
+            form += "<td>Role Name</td>";
+            form += '<td><input class="form-control" type ="text" id="role_name"></td>';
             form += "</tr>";
             form += "<tr>";
-            form += "<td>Position Description</td>";
-            form += '<td><input class="form-control" type ="text" id="position_description"></td>';
+            form += "<td>Role Description</td>";
+            form += '<td><input class="form-control" type ="text" id="role_description"></td>';
             form += "</tr>";
             form += "<tr>";
             form +=
@@ -133,13 +135,13 @@ function OpenForm() {
 
         function SavePosition() {
             var formData = '{';
-            formData += '"positionCode":"' + $('#position_code').val() + '",';
-            formData += '"positionName":"' + $('#position_name').val() + '",';
-            formData += '"positionDescription":"' + $('#position_description').val() + '"';
+            formData += '"roleCode":"' + $('#role_code').val() + '",';
+            formData += '"roleName":"' + $('#role_name').val() + '",';
+            formData += '"roleDescription":"' + $('#role_description').val() + '"';
             formData += '}';
 
             $.ajax({
-                url: '/api/position',
+                url: '/api/role',
                 type: 'post',
                 contentType: 'application/json',
                 data: formData,
@@ -149,148 +151,6 @@ function OpenForm() {
             });
         }
 
-        function formEdit(id) {
-            $.ajax({
-                url: '/api/position/' + id,
-                type: 'get',
-                contentType: 'application/json',
-                success: function (data) {
-                    var form = '<table class="table table-bordered">';
-                    form += "<tr>";
-                    form += "<td>Position Code</td>";
-                    form += '<td><input class="form-control" type ="text" id="position_code" value="' + data
-                        .positionCode + '"></td>';
-                    form += "</tr>";
-                    form += "<tr>";
-                    form += "<td>Position Name</td>";
-                    form += '<td><input class="form-control" type ="text" id="position_name" value ="' +
-                        data.positionName + '"></td>';
-                    form += "</tr>";
-                    form += "<tr>";
-                    form += "<td>Position Description</td>";
-                    form +=
-                        '<td><input class="form-control" type ="text" id="position_description" value ="' +
-                        data.positionDescription + '"></td>';
-                    form += "</tr>";
-                    form += "<tr>";
-                    form += '<td colspan="2"><button class="btn btn-primary" value="' + data.id +
-                        '" onclick = "UpdatePosition(this.value)">Save</button></td>';
-                    form += '</tr>';
-                    $('#positionList').html(form);
-                }
-            })
-        }
-
-        function UpdatePosition(id) {
-            var formData = '{';
-            formData += '"positionCode":"' + $('#position_code').val() + '",';
-            formData += '"positionName":"' + $('#position_name').val() + '",';
-            formData += '"positionDescription":"' + $('#position_description').val() + '"';
-            formData += '}';
-
-
-            Swal.fire({
-              title: 'Are you sure?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, Update Data!'
-            }).then((result) => {
-              if (result.isConfirmed) {
-
-                $.ajax({
-                url: '/api/position/' + id,
-                type: 'put',
-                contentType: 'application/json',
-                data: formData,
-                success: function (data) {
-                    OpenList(0,5);
-                }
-                })
-                Swal.fire(
-                  'Update!',
-                  'Your data has been updated.',
-                  'success'
-                )
-              }
-            });
-
-
-        }
-
-        function DeletePosition(id) {
-
-            Swal.fire({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-              if (result.isConfirmed) {
-
-                $.ajax({
-                url: '/api/position/' + id,
-                type: 'delete',
-                contentType: 'application/json',
-                data: id,
-                success: function (data) {
-                    OpenList();
-                }
-            })
-                Swal.fire(
-                  'Deleted!',
-                  'Your file has been deleted.',
-                  'success'
-                )
-              }
-            });
-
-
-        }
-
-        function SearchPosition(request) {
-            //console.log(request)
-
-            if (request.length > 0) {
-                $.ajax({
-                    url: '/api/searchposition/' + request,
-                    type: 'GET',
-                    contentType: 'application/json',
-                    success: function (result) {
-                        //console.log(result)
-                        let table = "<table class='table table-bordered mt-3'>";
-                        table +=
-                            "<tr> <th width='10%'>No</th> <th>Position Code</th> <th>Position Name</th> <th>Position Description</th><th>Action</th> </tr>"
-                        if (result.length > 0) {
-                            for (let i = 0; i < result.length; i++) {
-                                table += "<tr>";
-                                table += "<td class='text-center'>" + (i + 1) + "</td>";
-                                table += "<td>" + result[i].positionCode + "</td>";
-                                table += "<td>" + result[i].positionName + "</td>";
-                                table += "<td>" + result[i].positionDescription + "</td>";
-                                table += "<td><button class='btn btn-primary' value='" + result[i].id +
-                                    "' onclick='formEdit(this.value)'>Edit</button> <button class='btn btn-danger' value='" +
-                                    result[i].id +
-                                    "' onclick='DeletePosition(this.value)'>Delete</button> </td>";
-                                table += "</tr>";
-                            }
-                        } else {
-                            table += "<tr>";
-                            table += "<td colspan='4' class='text-center'>No data</td>";
-                            table += "</tr>";
-                        }
-                        table += "</table>";
-                        $('#positionList').html(table);
-                    }
-                });
-            } else {
-                OpenList(0,5);
-            }
-        }
 
 
 

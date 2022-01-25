@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,18 +29,18 @@ public class ApiRoleController {
     private roleRepo roleRepo;
 
 
-    @GetMapping("/position")
+    @GetMapping("/role")
     public ResponseEntity<List<Role>> GetAllPosition() {
         try {
-            List<Role> positions = this.roleRepo.findAll();
-            return new ResponseEntity<>(positions, HttpStatus.OK);
+            List<Role> roles = this.roleRepo.findAll();
+            return new ResponseEntity<>(roles, HttpStatus.OK);
         }catch (Exception exception){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
 
-    @GetMapping("/positionmapped")
+    @GetMapping("/rolemapped")
     public ResponseEntity<Map<String, Object>> GetAllPage(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "0" ) int size) {
         try {
             List<Role> role = new ArrayList<>();
@@ -58,6 +60,16 @@ public class ApiRoleController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/role")
+    public ResponseEntity<Object> savePosition(@RequestBody Role role){
+        Role roleData = this.roleRepo.save(role);
+        if (roleData.equals(role)){
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("failed", HttpStatus.BAD_REQUEST);
         }
     }
 }

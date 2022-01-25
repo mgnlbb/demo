@@ -44,7 +44,7 @@
         contentType: 'application/json',
         success: function(data){
             var table = "<table class='table table-bordered'>";
-            table += "<tr> <th width='10%' class='text-center'>No</th> <th class='text-center'>NIP</th> <th class='text-center'>Name</th> <th class='text-center'>DOB</th> <th class='text-center'>POB</th> <th class='text-center'>HP</th> <th class='text-center'>Email</th> <th class='text-center'>Agama</th> <th class='text-center'>Position</th> <th class='text-center'>Sisa cuti</th> <th class='text-center'>Action</th> </tr>";
+            table += "<tr> <th width='10%' class='text-center'>No</th> <th class='text-center'>NIP</th> <th class='text-center'>Name</th> <th class='text-center'>DOB</th> <th class='text-center'>POB</th> <th class='text-center'>HP</th> <th class='text-center'>Email</th> <th class='text-center'>Agama</th> <th class='text-center'>Position</th> <th class='text-center'>Role</th> <th class='text-center'>Sisa cuti</th> <th class='text-center'>Action</th> </tr>";
             for (let i=0; i<data.length; i++){
                 table += "<tr>";
                 table += "<td class='text-center'>" + (i+1) + "</td>";
@@ -56,7 +56,7 @@
                 table += "<td class='text-center'>" + data[i].employeeEmail + "</td>";
                 table += "<td class='text-center'>" + data[i].employeeAgama + "</td>";
                 table += "<td>" + data[i].position.positionName + "</td>";
-                // table += "<td>" + data[i].role.roleName + "</td>";
+                table += "<td>" + data[i].role.roleName + "</td>";
                 table += "<td class='text-center'>" + (data[i].sisaCuti) + "</td>";
                 table += "<td class='text-center'><a href='/employee/edit/"+ data[i].id +"' class='btn btn-primary mr-2'>Edit</a><button class='btn btn-danger' value='"+ data[i].id +"' onclick='formDelete(this.value)'>Delete</button></td>";
                 table += "</tr>"

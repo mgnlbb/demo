@@ -80,14 +80,14 @@
                 </select>
             </td>
         </tr>
-        <!-- <tr>
+        <tr>
             <td>Role </td>
             <td>
                 <select class="custom-select roleID"  id="role_id">
                     <option>Role</option>
                 </select>
             </td>
-        </tr> -->
+        </tr>
         <tr>
             <td colspan="2"><button onclick="SaveEmployee()" class="btn btn-sm btn-primary">Save</button></td>
         </tr>
@@ -119,19 +119,19 @@
        }
     });
 
-    //get role
-    // $.ajax({
-    //     url: '/api/role',
-    //     type: 'GET',
-    //     contentType: 'application/json',
-    //     success: function (role) {
-    //         let select = ''
-    //         for (let i = 0; i < role.length; i++) {
-    //             select += "<option value='" + role[i].id + "'>" + role[i].roleName + "</option>"
-    //         }
-    //         $('.roleID').html(select);
-    //     }
-    // });
+    
+    $.ajax({
+        url: '/api/role',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (role) {
+            let select = ''
+            for (let i = 0; i < role.length; i++) {
+                select += "<option value='" + role[i].id + "'>" + role[i].roleName + "</option>"
+            }
+            $('.roleID').html(select);
+        }
+    });
 
     function SaveEmployee()
     {
@@ -143,8 +143,8 @@
         request += '"employeePob" : "' + $('#employee_pob').val() + '",';
         request += '"employeeHp" : "' + $('#employee_hp').val() + '",';
         request += '"employeeAgama" : "' + $('#employee_agama').val() + '",';
-        request += '"positionId" : "' + $('#position_id').val() + '"';
-        // request += '"roleId" : "' + $('#role_id').val() + '"';
+        request += '"positionId" : "' + $('#position_id').val() + '",';
+        request += '"roleId" : "' + $('#role_id').val() + '"';
         request += '}'
 
         $.ajax({
