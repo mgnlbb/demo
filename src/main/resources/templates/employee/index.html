@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee API</title>
+    <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/position/index">Position</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/role/index">Role</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/employee/index">Employee</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cuti/index">Cuti</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container pt-4">
+    <h2>Employee API</h2>
+    <p>
+        <a class="btn btn-primary" href="/employee/new">Add New Employee</a>
+    </p>
+    <div id="employeeList"></div>
+</div>
+<script src="/js/jquery-3.5.1.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.bundle.min.js" ></script>
+    <script>
+    $.ajax({
+        url: '/api/employee',
+        type: 'get',
+        contentType: 'application/json',
+        success: function(data){
+            var table = "<table class='table table-bordered'>";
+            table += "<tr> <th width='10%' class='text-center'>No</th> <th class='text-center'>NIP</th> <th class='text-center'>Name</th> <th class='text-center'>DOB</th> <th class='text-center'>POB</th> <th class='text-center'>HP</th> <th class='text-center'>Email</th> <th class='text-center'>Agama</th> <th class='text-center'>Position</th> <th class='text-center'>Sisa cuti</th> <th class='text-center'>Action</th> </tr>";
+            for (let i=0; i<data.length; i++){
+                table += "<tr>";
+                table += "<td class='text-center'>" + (i+1) + "</td>";
+                table += "<td class='text-center'>" + data[i].employeeNip + "</td>";
+                table += "<td class='text-center'>" + data[i].employeeName + "</td>";
+                table += "<td class='text-center'>" + data[i].employeeDob + "</td>";
+                table += "<td class='text-center'>" + data[i].employeePob + "</td>";
+                table += "<td class='text-center'>" + data[i].employeeHp + "</td>";
+                table += "<td class='text-center'>" + data[i].employeeEmail + "</td>";
+                table += "<td class='text-center'>" + data[i].employeeAgama + "</td>";
+                table += "<td>" + data[i].position.positionName + "</td>";
+                // table += "<td>" + data[i].role.roleName + "</td>";
+                table += "<td class='text-center'>" + (data[i].sisaCuti) + "</td>";
+                table += "<td class='text-center'><a href='/employee/edit/"+ data[i].id +"' class='btn btn-primary mr-2'>Edit</a><button class='btn btn-danger' value='"+ data[i].id +"' onclick='formDelete(this.value)'>Delete</button></td>";
+                table += "</tr>"
+            }
+            table += "</table>";
+            $('#employeeList').html(table);
+         }
+    });
+
+    function formDelete(id){
+    var prompt = window.confirm("Are you sure?");
+    if(prompt){
+    console.log(id)
+        $.ajax({
+            url: '/api/employee/' + id,
+            type: 'delete',
+            contentType: 'application/json',
+            success: function(data){
+               window.location.href = '/employee/index'
+            }
+        });
+    }
+}
+    </script>
+</body>
+</html>

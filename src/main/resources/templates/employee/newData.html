@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Employee</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+
+
+    <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/position/index">Position</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/role/index">Role</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/employee/index">Employee</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/cuti/index">Cuti</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid col-md-8">
+    <p>
+        <a href="/employee/index">List Employee</a>
+    </p>
+    <table class="table table-bordered">
+        <tr>
+            <td>NIP </td>
+            <td><input class="form-control"  type="text" id="employee_nip"></td>
+        </tr>
+        <tr>
+            <td>Name </td>
+            <td><input class="form-control"  type="text" id="employee_name"></td>
+        </tr>
+        <tr>
+            <td>Email </td>
+            <td><input class="form-control"  type="text" id="employee_email"></td>
+        </tr>
+        <tr>
+            <td>DOB </td>
+            <td><input class="form-control datepicker"  type="text" id="employee_dob"></td>
+        </tr>
+        <tr>
+            <td>POB </td>
+            <td><input class="form-control"  type="text" id="employee_pob"></td>
+        </tr>
+        <tr>
+            <td>No. HP </td>
+            <td><input class="form-control"  type="text" id="employee_hp"></td>
+        </tr>
+        <tr>
+            <td>Agama </td>
+            <td><select class="custom-select"  id="employee_agama">
+                <option>-- pilih --</option>
+                <option value="budha">Budha</option>
+                <option value="hindu">Hindu</option>
+                <option value="islam">Islam</option>
+                <option value="kristen">Kristen</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>Position </td>
+            <td>
+                <select class="custom-select positionID"  id="position_id">
+                    <option>position</option>
+                </select>
+            </td>
+        </tr>
+        <!-- <tr>
+            <td>Role </td>
+            <td>
+                <select class="custom-select roleID"  id="role_id">
+                    <option>Role</option>
+                </select>
+            </td>
+        </tr> -->
+        <tr>
+            <td colspan="2"><button onclick="SaveEmployee()" class="btn btn-sm btn-primary">Save</button></td>
+        </tr>
+    </table>
+</div>
+<script src="/js/jquery-3.5.1.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.bundle.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(function () {
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+        });
+    });
+
+    //get position
+    $.ajax({
+       url: '/api/position',
+       type: 'GET',
+       contentType: 'application/json',
+       success: function (position) {
+           let select = ''
+           for (let i = 0; i < position.length; i++) {
+               select += "<option value='" + position[i].id + "'>" + position[i].positionName + "</option>"
+           }
+           $('.positionID').html(select);
+       }
+    });
+
+    //get role
+    // $.ajax({
+    //     url: '/api/role',
+    //     type: 'GET',
+    //     contentType: 'application/json',
+    //     success: function (role) {
+    //         let select = ''
+    //         for (let i = 0; i < role.length; i++) {
+    //             select += "<option value='" + role[i].id + "'>" + role[i].roleName + "</option>"
+    //         }
+    //         $('.roleID').html(select);
+    //     }
+    // });
+
+    function SaveEmployee()
+    {
+        var request = '{'
+        request += '"employeeNip" : "' + $('#employee_nip').val() + '",';
+        request += '"employeeName" : "' + $('#employee_name').val() + '",';
+        request += '"employeeEmail" : "' + $('#employee_email').val() + '",';
+        request += '"employeeDob" : "' + $('#employee_dob').val() + '",';
+        request += '"employeePob" : "' + $('#employee_pob').val() + '",';
+        request += '"employeeHp" : "' + $('#employee_hp').val() + '",';
+        request += '"employeeAgama" : "' + $('#employee_agama').val() + '",';
+        request += '"positionId" : "' + $('#position_id').val() + '"';
+        // request += '"roleId" : "' + $('#role_id').val() + '"';
+        request += '}'
+
+        $.ajax({
+            url: '/api/employee',
+            type: 'post',
+            contentType: 'application/json',
+            data: request,
+            success: function (request) {
+                window.location.href = '/employee/index'
+            }
+        });
+    }
+</script>
+</body>
+</html>
